@@ -58,14 +58,17 @@ extern "C" char* sbrk(int incr);
 extern "C" char* sbrk(int incr);
 #endif
 
-// #ifdef __AVR_XMEGA__
+#ifdef __SAM3X8E__
+DueFlashStorage dueFlashStorage;
+#endif
+
+#if defined(ARDUINO_MINIMA) || defined(ARDUINO_UNOWIFIR4) || defined(ARDUINO_NANO_R4)
+extern "C" char* sbrk(int incr);
+#endif
+
 #if defined(DXCORE)
 flash_page_t cache_page;                // flash page cache
 byte curr_page_num = 0;
-#endif
-
-#ifdef __SAM3X8E__
-DueFlashStorage dueFlashStorage;
 #endif
 
 //
@@ -822,10 +825,14 @@ void CBUSConfig::reboot(void) {
 
 // for Raspberry Pi Pico using arduino-pico core
 #ifdef ARDUINO_ARCH_RP2040
-  // watchdog_enable(100, 1);      // set watchdog timeout to 100ms and allow to expire
-  // while (1);
-  rp2040.reboot();
+  watchdog_enable(100, 1);      // set watchdog timeout to 100ms and allow to expire
+  while (1);
 #endif
+
+#if defined(ARDUINO_MINIMA) || defined(ARDUINO_UNOWIFIR4) || defined(ARDUINO_NANO_R4)
+  NVIC_SystemReset();
+#endif
+
 }
 
 //
@@ -833,6 +840,7 @@ void CBUSConfig::reboot(void) {
 //
 
 unsigned int CBUSConfig::freeSRAM(void) {
+
 #ifdef __AVR__
   extern int __heap_start, *__brkval;
   int v;
@@ -849,6 +857,11 @@ unsigned int CBUSConfig::freeSRAM(void) {
 #endif
 
 #ifdef ARDUINO_ARCH_RP2040
+  char top;
+  return &top - reinterpret_cast<char*>(sbrk(0));
+#endif
+
+#if defined(ARDUINO_MINIMA) || defined(ARDUINO_UNOWIFIR4) || defined(ARDUINO_NANO_R4)
   char top;
   return &top - reinterpret_cast<char*>(sbrk(0));
 #endif

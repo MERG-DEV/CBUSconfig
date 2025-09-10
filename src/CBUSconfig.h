@@ -83,54 +83,56 @@ class CBUSConfig {
 
 public:
   CBUSConfig();
-  void begin(void);
+  virtual void begin(void);
 
-  byte findExistingEvent(unsigned int nn, unsigned int en);
-  byte findEventSpace(void);
+  virtual byte findExistingEvent(unsigned int nn, unsigned int en);
+  virtual byte findEventSpace(void);
 
-  void printEvHashTable(bool raw);
-  byte getEvTableEntry(byte tindex);
-  byte numEvents(void);
-  byte makeHash(byte tarr[]);
-  void getEvArray(byte idx);
-  void makeEvHashTable(void);
-  void updateEvHashEntry(byte idx);
-  void clearEvHashTable(void);
-  bool check_hash_collisions(void);
-  byte getEventEVval(byte idx, byte evnum);
-  void writeEventEV(byte idx, byte evnum, byte evval);
+  virtual void printEvHashTable(bool raw);
+  virtual byte getEvTableEntry(byte tindex);
+  virtual byte numEvents(void);
+  virtual byte makeHash(byte tarr[]);
+  // virtual void getEvArray(byte idx);
+  virtual void makeEvHashTable(void);
+  virtual void updateEvHashEntry(byte idx);
+  virtual void clearEvHashTable(void);
+  virtual bool check_hash_collisions(void);
 
-  byte readNV(byte idx);
-  void writeNV(byte idx, byte val);
-  void loadNVs(void);
+  virtual byte getEventEVval(byte idx, byte evnum);
+  virtual void writeEventEV(byte idx, byte evnum, byte evval);
 
-  void readEvent(byte idx, byte tarr[]);
-  void writeEvent(byte index, byte data[]);
-  void cleareventEEPROM(byte index);
-  void resetModule(CBUSLED& green, CBUSLED& yellow, CBUSSwitch& sw);
-  void resetModule(void);
+  virtual byte readNV(byte idx);
+  virtual void writeNV(byte idx, byte val);
+  virtual void loadNVs(void);
 
-  byte readEEPROM(unsigned int eeaddress);
-  void writeEEPROM(unsigned int eeaddress, byte data);
-  byte readBytesEEPROM(unsigned int eeaddress, byte nbytes, byte dest[]);
-  void writeBytesEEPROM(unsigned int eeaddress, byte src[], byte numbytes);
-  void resetEEPROM(void);
+  virtual void readEvent(byte idx, byte tarr[]);
+  virtual void writeEvent(byte index, byte data[]);
+  virtual void cleareventEEPROM(byte index);
+  virtual void resetModule(CBUSLED& green, CBUSLED& yellow, CBUSSwitch& sw);
+  virtual void resetModule(void);
 
-  void setCANID(byte canid);
-  void setFLiM(bool f);
-  void setNodeNum(unsigned int nn);
+  virtual byte readEEPROM(unsigned int eeaddress);
+  virtual void writeEEPROM(unsigned int eeaddress, byte data);
+  virtual byte readBytesEEPROM(unsigned int eeaddress, byte nbytes, byte dest[]);
+  virtual void writeBytesEEPROM(unsigned int eeaddress, byte src[], byte numbytes);
+  virtual void resetEEPROM(void);
 
-  void setResetFlag(void);
-  void clearResetFlag(void);
-  bool isResetFlagSet(void);
+  virtual void setCANID(byte canid);
+  virtual void setFLiM(bool f);
+  virtual void setNodeNum(unsigned int nn);
 
-  byte getChipEEPROMVal(unsigned int eeaddress);
-  void setChipEEPROMVal(unsigned int eeaddress, byte val);
+  virtual void setResetFlag(void);
+  virtual void clearResetFlag(void);
+  virtual bool isResetFlagSet(void);
 
-  bool setEEPROMtype(byte type);
-  void setExtEEPROMAddress(byte address, TwoWire *bus = &Wire);
-  unsigned int freeSRAM(void);
-  void reboot(void);
+  virtual byte getChipEEPROMVal(unsigned int eeaddress);
+  virtual void setChipEEPROMVal(unsigned int eeaddress, byte val);
+
+  virtual bool setEEPROMtype(byte type);
+  virtual void setExtEEPROMAddress(byte address, TwoWire *bus = &Wire);
+
+  virtual unsigned int freeSRAM(void);
+  virtual void reboot(void);
 
   unsigned int EE_EVENTS_START;
   byte EE_MAX_EVENTS;
@@ -148,3 +150,6 @@ public:
   byte *evhashtbl;
   bool hash_collision;
 };
+
+///
+
